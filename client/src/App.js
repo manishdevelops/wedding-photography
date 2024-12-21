@@ -1,14 +1,15 @@
 import './App.css';
+import Header from './components/layout/Header';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
+    <BrowserRouter>
+      <header>
+        <Header />
+        <hr className=' md:w-[92%] lg:w-[85%] mx-auto hidden md:block' />
       </header>
-    </div>
+    </BrowserRouter>
   );
 }
 
