@@ -6,7 +6,9 @@ import AboutUs from "./components/pages/AboutUs";
 import ContactUs from "./components/pages/ContactUs";
 import Gallery from "./components/pages/Gallery";
 import Services from "./components/pages/Services";
-import SocialMedia from "./components/pages/SocialMedia";
+import Footer from "./components/layout/Footer";
+import TermsAndServices from "./components/common/TermsAndServices";
+import Consultation from "./components/layout/Consultation";
 
 function App() {
   return (
@@ -17,14 +19,21 @@ function App() {
         <hr className=' md:w-[92%] lg:w-[85%] mx-auto hidden md:block' />
       </header>
 
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/about-us' element={<AboutUs />} />
-        <Route path='/contact-us' element={<ContactUs />} />
-        <Route path='/gallery' element={<Gallery />} />
-        <Route path='/services' element={<Services />} />
-        <Route path='/social-media' element={<SocialMedia />} />
-      </Routes>
+      <main>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/about-us' element={<AboutUs />} />
+          <Route path='/contact-us' element={<ContactUs />} />
+          <Route path='/gallery' element={<Gallery />} />
+          <Route path='/services' element={<Services />} />
+          <Route path='/terms-of-service' element={<TermsAndServices />} />
+          <Route path='/book-consultation' element={<Consultation />} />
+        </Routes>
+      </main>
+
+      <footer>
+        <Footer />
+      </footer>
 
     </BrowserRouter>
   );

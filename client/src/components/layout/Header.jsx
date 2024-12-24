@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
+    { name: 'Home', href: '/' },
     { name: 'About Us', href: '/about-us' },
     { name: 'Gallery', href: '/gallery' },
     { name: 'Services', href: '/services' },
     { name: 'Contact Us', href: '/contact-us' },
-    { name: 'Social Media', href: '/social-media' },
 ]
 
 function classNames(...classes) {
@@ -57,8 +57,8 @@ export default function Header() {
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
-                            <Link to='/book-consultation' className='text-white bg-pink-500 hover:bg-pink-700 rounded-md px-3 py-2 text-sm font-bold'>
-                                Book a Consultation
+                            <Link to='/contact-us' className='text-white bg-pink-500 hover:bg-pink-700 rounded-md px-3 py-2 text-sm font-bold'>
+                                Request a Quote
                             </Link>
                         </div>
                     </div>
