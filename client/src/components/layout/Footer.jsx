@@ -13,7 +13,7 @@ const Footer = () => {
                             <FaPhone className="mr-2" /> 7294157589
                         </p>
                         <p className="flex items-center mb-2">
-                            <FaEnvelope className="mr-2" /> manish.kumar.mandal@gmail.com
+                            <FaEnvelope className="mr-2" /> manishdevelops411@gmail.com
                         </p>
                         <p className="flex items-center">
                             <FaMapMarkerAlt className="mr-2" /> Digwadig, Dhanbad, India
@@ -41,4 +41,4 @@ const Footer = () => {
     )
 }
 
-export default Footer
+export default Footer;

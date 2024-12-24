@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaInstagram, FaFacebook } from 'react-icons/fa'
 
+import validator from 'validator';
+
 const ContactUs = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        phone: '', // Added phone field
+        phone: '',
         weddingDate: '',
         message: ''
     })
+    const [errors, setErrors] = useState({})
 
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -16,10 +19,43 @@ const ContactUs = () => {
         console.log(formData)
     }
 
+    const validateEmail = (email) => {
+        return validator.isEmail(email);
+    }
+
+    const validatePhone = (phone) => {
+        const re = /^\d{10}$/
+        return re.test(String(phone))
+    }
+
+    const validateForm = () => {
+        const newErrors = {}
+        if (!formData.name) newErrors.name = 'Please enter your name.'
+        if (!formData.email) {
+            newErrors.email = 'Please enter your email address.'
+        } else if (!validateEmail(formData.email)) {
+            newErrors.email = 'Please enter a valid email address.'
+        }
+        if (!formData.phone) {
+            newErrors.phone = 'Please provide your phone number.'
+        } else if (!validatePhone(formData.phone)) {
+            newErrors.phone = 'Please enter a valid 10-digit phone number.'
+        }
+        if (!formData.weddingDate) newErrors.weddingDate = 'Please select the event date.'
+        if (!formData.message) newErrors.message = 'Please write a message.'
+        return newErrors
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log('Form submitted:', formData)
-        // Add your form submission logic here
+        const validationErrors = validateForm()
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors)
+        } else {
+            console.log('Form submitted:', formData)
+            // Add your form submission logic here
+            setErrors({})
+        }
     }
 
     const today = new Date().toISOString().split('T')[0]
@@ -40,22 +76,27 @@ const ContactUs = () => {
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Name</label>
                             <input type="text" id="name" value={formData.name} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" />
+                            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Email</label>
                             <input type="email" id="email" value={formData.email} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" />
+                            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Phone</label> {/* Added phone label */}
-                            <input type="tel" id="phone" value={formData.phone} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" /> {/* Added phone input */}
+                            <label className="block text-sm font-medium text-gray-700">Phone</label>
+                            <input type="tel" id="phone" value={formData.phone} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" />
+                            {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Event Date</label>
                             <input type="date" id="weddingDate" value={formData.weddingDate} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" min={today} />
+                            {errors.weddingDate && <p className="text-red-500 text-sm">{errors.weddingDate}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Message</label>
                             <textarea id="message" value={formData.message} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" rows="4"></textarea>
+                            {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
                         </div>
                         <div>
                             <button type="submit" className="w-full shadow-lg text-white bg-pink-500 hover:bg-pink-700 rounded-md px-4 py-2 text-lg font-bold" style={{ fontFamily: "'Dancing Script', cursive" }}>
@@ -71,7 +112,7 @@ const ContactUs = () => {
                     </div>
                     <div className="flex items-center">
                         <FaEnvelope className="text-pink-500 mr-4" />
-                        <span className="text-lg" style={{ fontFamily: "'Dancing Script', cursive", color: '#6c757d' }}>manish.kumar.mandal411@gmail.com</span>
+                        <span className="text-lg" style={{ fontFamily: "'Dancing Script', cursive", color: '#6c757d' }}>manishdevelops411@gmail.com</span>
                     </div>
                     <div className="flex items-center">
                         <FaMapMarkerAlt className="text-pink-500 mr-4" />
