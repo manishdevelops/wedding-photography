@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaInstagram, FaFacebook } from 'react-icons/fa'
-
+import { toast } from 'react-toastify';
 import validator from 'validator';
 
 const ContactUs = () => {
@@ -12,6 +12,9 @@ const ContactUs = () => {
         message: ''
     })
     const [errors, setErrors] = useState({})
+    const [loading, setLoading] = useState(false);
+    const today = new Date().toISOString().split('T')[0];
+
 
     const handleChange = (e) => {
         const { id, value } = e.target
@@ -46,25 +49,56 @@ const ContactUs = () => {
         return newErrors
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         const validationErrors = validateForm()
         if (Object.keys(validationErrors).length > 0) {
-            setErrors(validationErrors)
-        } else {
-            console.log('Form submitted:', formData)
-            // Add your form submission logic here
-            setErrors({})
+            setErrors(validationErrors);
+            return;
         }
+
+        console.log('Form submitted:', formData)
+        setErrors({});
+        try {
+            setLoading(true);
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/contacts/create-contact`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (res.ok === false) {
+                const errorData = await res.json();
+                setLoading(false);
+                return toast.error(errorData.message);
+            }
+            setLoading(false);
+            toast.success('Your received your details. We will get back to you shortly!');
+
+            setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                weddingDate: '',
+                message: ''
+            });
+
+        } catch (error) {
+            setLoading(false);
+            toast.error(error.message);
+        }
+
+
     }
 
-    const today = new Date().toISOString().split('T')[0]
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="text-center mb-8">
                 <h1 className="text-4xl font-bold mb-8 text-center" style={{ fontFamily: "'Dancing Script', cursive", color: '#d63384', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)' }}>
-                    Contact Us
+                    Contact Us For Booking
                 </h1>
                 <p className="text-lg" style={{ fontFamily: "'Dancing Script', cursive", color: '#6c757d' }}>
                     We'd love to hear from you! Please fill out the form below to get in touch.
@@ -100,7 +134,7 @@ const ContactUs = () => {
                         </div>
                         <div>
                             <button type="submit" className="w-full shadow-lg text-white bg-pink-500 hover:bg-pink-700 rounded-md px-4 py-2 text-lg font-bold" style={{ fontFamily: "'Dancing Script', cursive" }}>
-                                Request a Consultation
+                                {loading ? 'Loading' : 'Request a Consultation'}
                             </button>
                         </div>
                     </form>
