@@ -10,16 +10,15 @@ const ContactUs = () => {
         phone: '',
         weddingDate: '',
         message: ''
-    })
-    const [errors, setErrors] = useState({})
+    });
+    const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const today = new Date().toISOString().split('T')[0];
 
 
     const handleChange = (e) => {
-        const { id, value } = e.target
-        setFormData({ ...formData, [id]: value })
-        console.log(formData)
+        const { id, value } = e.target;
+        setFormData({ ...formData, [id]: value });
     }
 
     const validateEmail = (email) => {
@@ -27,8 +26,8 @@ const ContactUs = () => {
     }
 
     const validatePhone = (phone) => {
-        const re = /^\d{10}$/
-        return re.test(String(phone))
+        const re = /^\d{10}$/;
+        return re.test(String(phone));
     }
 
     const validateForm = () => {
@@ -57,7 +56,6 @@ const ContactUs = () => {
             return;
         }
 
-        console.log('Form submitted:', formData)
         setErrors({});
         try {
             setLoading(true);
@@ -75,7 +73,7 @@ const ContactUs = () => {
                 return toast.error(errorData.message);
             }
             setLoading(false);
-            toast.success('Your received your details. We will get back to you shortly!');
+            toast.success('We received your details. We will get back to you shortly!');
 
             setFormData({
                 name: '',
@@ -134,7 +132,7 @@ const ContactUs = () => {
                         </div>
                         <div>
                             <button type="submit" className="w-full shadow-lg text-white bg-pink-500 hover:bg-pink-700 rounded-md px-4 py-2 text-lg font-bold" style={{ fontFamily: "'Dancing Script', cursive" }}>
-                                {loading ? 'Loading' : 'Request a Consultation'}
+                                {loading ? 'Loading...' : 'Request a Consultation'}
                             </button>
                         </div>
                     </form>
@@ -169,4 +167,4 @@ const ContactUs = () => {
     )
 }
 
-export default ContactUs
+export default ContactUs;
