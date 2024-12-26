@@ -42,9 +42,9 @@ exports.createContact = catchAsync(async (req, res, next) => {
         return next(new AppError('Booking successful but email could not be sent. Please conatct with the given phone number', 500));
     }
 
-    res.status(200).json({
+    res.status(201).json({
         status: "success",
-        data: req.body
+        data: contact
     });
 });
 

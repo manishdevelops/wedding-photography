@@ -15,12 +15,28 @@ const Testimonials = () => {
     const [reviews, setReviews] = useState(testimonials)
     const [name, setName] = useState('')
     const [review, setReview] = useState('')
+    const [errors, setErrors] = useState({})
+
+    const validateForm = () => {
+        const newErrors = {}
+        if (!name) newErrors.name = 'Please enter your name.'
+        if (!review) newErrors.review = 'Please write a review.'
+        return newErrors
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        const validationErrors = validateForm()
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors)
+            return
+        }
+
         const newReview = { name, review }
+        setReviews([...reviews, newReview])
         setName('')
         setReview('')
+        setErrors({})
         console.log(newReview)
     }
 
@@ -45,6 +61,7 @@ const Testimonials = () => {
                         onChange={(e) => setName(e.target.value)}
                         className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                     />
+                    {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Review</label>
@@ -54,6 +71,7 @@ const Testimonials = () => {
                         className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm"
                         rows="4"
                     ></textarea>
+                    {errors.review && <p className="text-red-500 text-sm">{errors.review}</p>}
                 </div>
                 <div>
                     <button type="submit" className="w-full shadow-lg text-white bg-pink-500 hover:bg-pink-700 rounded-md px-4 py-2 text-lg font-bold" style={{ fontFamily: "'Dancing Script', cursive" }}>

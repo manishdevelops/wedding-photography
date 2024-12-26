@@ -5,11 +5,13 @@ const AppError = require('./utils/appError');
 const globalErrorController = require('./controllers/errorController');
 
 const contactRoute = require('./routes/contactRoute');
+const reviewRoute = require('./routes/reviewRoute');
 
 app.use(cors()); // Use CORS middleware
 app.use(express.json());
 
 app.use('/api/contacts', contactRoute);
+app.use('/api/reviews', reviewRoute);
 
 //the routes that are not handled by the above routes.
 app.all('*', (req, res, next) => {
