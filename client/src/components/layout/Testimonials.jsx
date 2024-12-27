@@ -1,21 +1,50 @@
-import React, { useState } from 'react';
-
-const testimonials = [
-    {
-        name: 'Jane Doe',
-        review: 'Amazing experience! The photos turned out beautiful and captured every special moment.'
-    },
-    {
-        name: 'John Smith',
-        review: 'Professional and friendly service. Highly recommend!'
-    }
-]
+import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const Testimonials = () => {
-    const [reviews, setReviews] = useState(testimonials)
+    const [reviews, setReviews] = useState()
     const [name, setName] = useState('')
     const [review, setReview] = useState('')
     const [errors, setErrors] = useState({})
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [loading, setLoading] = useState(false);
+    const [loadReview, setLoadReview] = useState(false);
+
+    const getReviews = async () => {
+        try {
+            setLoadReview(true);
+
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/get-reviews`);
+            if (!res.ok) {
+                setLoadReview(false);
+                const errorData = res.json();
+                return toast.error(errorData.message);
+            }
+
+            const data = await res.json();
+            setLoadReview(false);
+            setReviews(data.data);
+
+        } catch (error) {
+            setLoadReview(true);
+            return toast.error(error.message);
+        }
+    }
+
+    useEffect(() => {
+        getReviews();
+
+    }, [])
+
+    useEffect(() => {
+        if (reviews && reviews.length > 0) {
+            const interval = setInterval(() => {
+                setCurrentIndex((prevIndex) => (prevIndex + 1) % reviews.length);
+            }, 5000);
+
+            return () => clearInterval(interval); // Cleanup on unmount or reviews change
+        }
+    }, [reviews]); // Runs whenever `reviews` changes
 
     const validateForm = () => {
         const newErrors = {}
@@ -24,7 +53,7 @@ const Testimonials = () => {
         return newErrors
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         const validationErrors = validateForm()
         if (Object.keys(validationErrors).length > 0) {
@@ -37,21 +66,67 @@ const Testimonials = () => {
         setName('')
         setReview('')
         setErrors({})
-        console.log(newReview)
+
+        try {
+            setLoading(true);
+
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/create-review`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newReview)
+            });
+
+            if (res.ok === false) {
+                const errorData = await res.json();
+                setLoading(false);
+                return toast.error(errorData.message);
+            }
+
+            setLoading(false);
+            toast.success('Review submitted successfully😇!');
+            getReviews();
+
+        } catch (error) {
+            setLoading(false);
+            toast.error(error.message);
+        }
     }
+
+    const Shimmer = () => (
+        <div className="flex flex-col items-center bg-gray-200 p-6 rounded-lg shadow-lg animate-pulse w-full max-w-sm mx-auto">
+            <div className="h-6 bg-gray-300 rounded w-1/2 mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+        </div>
+    )
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <h2 className="text-4xl font-bold mb-8 text-center" style={{ fontFamily: "'Dancing Script', cursive", color: '#d63384', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)' }}>Testimonials</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                {reviews.map((testimonial, index) => (
-                    <div key={index} className="bg-white p-6 rounded-lg shadow-lg">
-                        <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: "'Dancing Script', cursive", color: '#d63384' }}>{testimonial.name}</h3>
-                        <p className="text-lg" style={{ fontFamily: "'Dancing Script', cursive", color: '#6c757d' }}>{testimonial.review}</p>
-                    </div>
-                ))}
-            </div>
-            <h2 className="text-2xl font-semibold mb-4 text-center" style={{ fontFamily: "'Dancing Script', cursive", color: '#d63384' }}>Leave a Review</h2>
+            {
+                loadReview ?
+                    <div className="flex justify-center">
+                        <Shimmer />
+                    </div> :
+                    reviews && (
+                        <div className="relative">
+                            <div className="overflow-hidden">
+                                <div className="flex transition-transform duration-500" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+                                    {reviews.map((testimonial, index) => (
+                                        <div key={index} className="min-w-full flex flex-col items-center bg-white p-6 rounded-lg shadow-lg">
+                                            <h3 className="text-2xl font-bold mb-2" style={{ fontFamily: "'Dancing Script', cursive", color: '#d63384' }}>{testimonial.name}</h3>
+                                            <p className="text-lg" style={{ fontFamily: "'Dancing Script', cursive", color: '#6c757d' }}>{testimonial.review}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )
+            }
+            <h2 className="text-2xl font-semibold my-4 text-center" style={{ fontFamily: "'Dancing Script', cursive", color: '#d63384' }}>Leave a Review</h2>
             <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto lg:max-w-2xl lg:w-1/2 ">
                 <div>
                     <label className="block text-sm font-medium text-gray-700">Name</label>
@@ -75,7 +150,7 @@ const Testimonials = () => {
                 </div>
                 <div>
                     <button type="submit" className="w-full shadow-lg text-white bg-pink-500 hover:bg-pink-700 rounded-md px-4 py-2 text-lg font-bold" style={{ fontFamily: "'Dancing Script', cursive" }}>
-                        Submit
+                        {loading ? 'Loading...' : 'Submit'}
                     </button>
                 </div>
             </form>
