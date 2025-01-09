@@ -11,7 +11,7 @@ exports.createReview = catchAsync(async (req, res) => {
 });
 
 exports.getReview = catchAsync(async (req, res) => {
-    const review = await Review.findById({ _id: req.params.id });
+    const review = await Review.find({ _id: req.params.id });
 
     res.status(200).json({
         status: "success",

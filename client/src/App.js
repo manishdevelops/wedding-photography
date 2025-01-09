@@ -9,6 +9,8 @@ import Services from "./components/pages/Services";
 import Footer from "./components/layout/Footer";
 import TermsAndServices from "./components/common/TermsAndServices";
 import Consultation from "./components/layout/Consultation";
+import ManageGallery from "./components/layout/ManageGallery";
+import SecureUpload from "./components/layout/SecureUpload";
 
 function App() {
   return (
@@ -19,7 +21,7 @@ function App() {
         <hr className=' md:w-[92%] lg:w-[85%] mx-auto hidden md:block' />
       </header>
 
-      <main>
+      <main className="min-h-[70vh]">
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/about-us' element={<AboutUs />} />
@@ -28,6 +30,8 @@ function App() {
           <Route path='/services' element={<Services />} />
           <Route path='/terms-of-service' element={<TermsAndServices />} />
           <Route path='/book-consultation' element={<Consultation />} />
+          <Route path='/manage-gallery' element={<ManageGallery />} />
+          <Route path='/secure-upload' element={<SecureUpload />} />
         </Routes>
       </main>
 
