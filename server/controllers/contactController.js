@@ -2,7 +2,6 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const Contact = require('../models/contactModel');
 const nodemailer = require('nodemailer');
-// const fetch = require('node-fetch');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
