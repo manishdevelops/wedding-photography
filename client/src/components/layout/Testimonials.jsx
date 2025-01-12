@@ -6,26 +6,28 @@ const Testimonials = () => {
     const [name, setName] = useState('')
     const [review, setReview] = useState('')
     const [errors, setErrors] = useState({})
+    const [error, setError] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0)
     const [loading, setLoading] = useState(false);
     const [loadReview, setLoadReview] = useState(false);
 
+
     const getReviews = async () => {
         try {
             setLoadReview(true);
-
+            setError(false);
             const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/get-reviews`);
             if (!res.ok) {
                 setLoadReview(false);
                 const errorData = res.json();
+                setError(true);
                 return toast.error(errorData.message);
             }
-
             const data = await res.json();
             setLoadReview(false);
             setReviews(data.data);
-
         } catch (error) {
+            setError(true);
             setLoadReview(true);
             return toast.error(error.message);
         }
@@ -79,9 +81,8 @@ const Testimonials = () => {
             });
 
             if (res.ok === false) {
-                const errorData = await res.json();
                 setLoading(false);
-                return toast.error(errorData.message);
+                return toast.error('Failed to submit Review!');
             }
 
             setLoading(false);
@@ -90,7 +91,7 @@ const Testimonials = () => {
 
         } catch (error) {
             setLoading(false);
-            toast.error(error.message);
+            toast.error('Failed to submit Review!');
         }
     }
 
@@ -104,10 +105,19 @@ const Testimonials = () => {
     )
 
     return (
+
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <h2 className="text-4xl font-bold mb-8 text-center" style={{ fontFamily: "'Dancing Script', cursive", color: '#d63384', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)' }}>Testimonials</h2>
             {
-                loadReview ?
+                !loading && error && (
+                    <p className="text-lg mb-8 text-center" style={{ fontFamily: "'Dancing Script', cursive", color: 'red' }}>
+                        Failed to load Reviews. Please try again later.
+                    </p>
+                )
+            }
+            {
+                !error && loadReview ?
                     <div className="flex justify-center">
                         <Shimmer />
                     </div> :

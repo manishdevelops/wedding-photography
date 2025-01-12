@@ -29,11 +29,15 @@ exports.getMedia = catchAsync(async (req, res) => {
     const limit = 2;
     const skip = (page - 1) * limit;
 
-    const media = await Media.find().skip(skip).limit(limit);
+    // Fetch media sorted by newest to oldest
+    const media = await Media.find()
+        .sort({ createdAt: -1 }) // Sort by createdAt field in descending order
+        .skip(skip)
+        .limit(limit);
 
     res.status(200).json({
         status: "success",
         results: media.length,
-        data: media
+        data: media,
     });
 });

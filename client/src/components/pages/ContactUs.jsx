@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaInstagram, FaFacebook } from 'react-icons/fa'
+import React, { useState, useRef } from 'react';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaInstagram, FaFacebook } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import validator from 'validator';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const ContactUs = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +14,8 @@ const ContactUs = () => {
     });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [recaptcha, setRecaptcha] = useState('');
+    const captchaRef = useRef();
     const today = new Date().toISOString().split('T')[0];
 
 
@@ -45,6 +48,7 @@ const ContactUs = () => {
         }
         if (!formData.weddingDate) newErrors.weddingDate = 'Please select the event date.'
         if (!formData.message) newErrors.message = 'Please write a message.'
+        if (!recaptcha) newErrors.captcha = 'Please verify that you are not a robot.';
         return newErrors
     }
 
@@ -58,13 +62,18 @@ const ContactUs = () => {
 
         setErrors({});
         try {
+            captchaRef.current.reset();
             setLoading(true);
             const res = await fetch(`${process.env.REACT_APP_API_URL}/api/contacts/create-contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(
+                    {
+                        ...formData, recaptcha
+                    }
+                )
             });
 
             if (res.ok === false) {
@@ -82,6 +91,7 @@ const ContactUs = () => {
                 weddingDate: '',
                 message: ''
             });
+            setRecaptcha('');
 
         } catch (error) {
             setLoading(false);
@@ -90,6 +100,10 @@ const ContactUs = () => {
 
 
     }
+
+    const handleCaptchaChange = (value) => {
+        setRecaptcha(value);
+    };
 
 
     return (
@@ -129,6 +143,14 @@ const ContactUs = () => {
                             <label className="block text-sm font-medium text-gray-700">Message</label>
                             <textarea id="message" value={formData.message} onChange={handleChange} className="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm" rows="4"></textarea>
                             {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
+                        </div>
+                        <div>
+                            <ReCAPTCHA
+                                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
+                                ref={captchaRef}
+                                onChange={handleCaptchaChange}
+                            />
+                            {errors.captcha && <p className="text-red-500 text-sm">{errors.captcha}</p>}
                         </div>
                         <div>
                             <button type="submit" className="w-full shadow-lg text-white bg-pink-500 hover:bg-pink-700 rounded-md px-4 py-2 text-lg font-bold" style={{ fontFamily: "'Dancing Script', cursive" }}>
