@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Dialog } from '@headlessui/react';
 import { ImCross } from "react-icons/im";
 import { Link } from 'react-router-dom';
-import { FaPlay, FaPause } from 'react-icons/fa';
+import { FaPlay, FaPause, FaArrowUp } from 'react-icons/fa';
 import Slideshow from '../common/Slideshow';
 import { toast } from 'react-toastify';
 import Shimmer from '../common/Shimmer';
@@ -18,8 +18,8 @@ const Gallery = () => {
     const [error, setError] = useState(false);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
+    const [showScrollTopButton, setShowScrollTopButton] = useState(false);
     const observer = useRef();
-    console.log(mediaData);
 
     const getMedia = useCallback(async () => {
         try {
@@ -27,10 +27,11 @@ const Gallery = () => {
             setError(false);
             const res = await fetch(`${process.env.REACT_APP_API_URL}/api/media/get-media?page=${page}`);
 
-            if (res.ok === false) {
+            if (!res.ok) {
+                const errorData = await res.json();
                 setLoading(false);
                 setError(true);
-                return;
+                return toast.error(errorData.message);
             }
 
             const resData = await res.json();
@@ -42,7 +43,7 @@ const Gallery = () => {
         } catch (error) {
             setLoading(false);
             setError(true);
-            return toast.error('Failed to load!');
+            return toast.error(error.message);
         }
     }, [page]);
 
@@ -60,6 +61,25 @@ const Gallery = () => {
         });
         if (node) observer.current.observe(node);
     }, [loading, hasMore]);
+
+    const handleScroll = () => {
+        if (window.scrollY > 300) {
+            setShowScrollTopButton(true);
+        } else {
+            setShowScrollTopButton(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     const filteredMedia = !error && mediaData.filter(media =>
         (selectedCategory === 'All Events' || media.eventName === selectedCategory) &&
@@ -191,6 +211,15 @@ const Gallery = () => {
                 )}
                 {slideshow && allImages.length > 0 && (
                     <Slideshow images={allImages} onClose={() => setSlideshow(false)} />
+                )}
+                {showScrollTopButton && (
+                    <button
+                        onClick={scrollToTop}
+                        className="fixed bottom-8 right-8 bg-pink-500 text-white p-3 rounded-full shadow-lg hover:bg-pink-700 transition-colors"
+                        aria-label="Scroll to top"
+                    >
+                        <FaArrowUp />
+                    </button>
                 )}
             </div>
         )

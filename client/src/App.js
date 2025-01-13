@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Header from './components/layout/Header';
 import Home from "./components/pages/Home";
@@ -32,6 +32,7 @@ function App() {
           <Route path='/book-consultation' element={<Consultation />} />
           <Route path='/manage-gallery' element={<ManageGallery />} />
           <Route path='/secure-upload' element={<SecureUpload />} />
+          <Route path="*" element={<Navigate to="/" />} /> {/* Catch-all route for undefined paths */}
         </Routes>
       </main>
 

@@ -181,7 +181,7 @@ const ContactUs = () => {
                         </a>
                     </div>
                     <div className="mt-8">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3653.2528219236356!2d86.41301307518593!3d23.702663978702994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f69900427331a1%3A0x39a3b9bc6f80ac15!2sDigwadih%2010%20no!5e0!3m2!1sen!2sin!4v1734863220873!5m2!1sen!2sin" width="100%" height="300" style={{ border: 0 }} loading="lazy" title='address'></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3653.2528219236356!2d86.41301307518593!3d23.702663978702994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f69900427331a1%3A0x39a3b9bc6f80ac15!2sDigwadih%2010%20no!5e0!3m2!1sen!2sin!4v1734863220873!5m2!1sen!2sin" width="100%" height="350" style={{ border: 0 }} loading="lazy" title='address'></iframe>
                     </div>
                 </div>
             </div>

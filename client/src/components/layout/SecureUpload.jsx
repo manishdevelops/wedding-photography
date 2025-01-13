@@ -80,8 +80,7 @@ const SecureUpload = () => {
         const newErrors = {};
         if (!photographer) newErrors.photographer = 'Please enter the photographer name.';
         if (!eventName) newErrors.eventName = 'Please select the event name.';
-        if (images.length === 0) newErrors.images = 'Please upload at least one image.';
-        if (videos.length === 0) newErrors.videos = 'Please upload at least one video.';
+        if (images.length === 0 && videos.length === 0) newErrors.media = 'Please upload at least one image or video.';
         return newErrors;
     };
 
@@ -120,7 +119,7 @@ const SecureUpload = () => {
             });
 
             if (res.ok === false) {
-                const errorData = await res.json();
+                // const errorData = await res.json();
                 setLoading(false);
                 return toast.error("File upload failed to databse!");
             }
@@ -172,6 +171,10 @@ const SecureUpload = () => {
                         <option value="Wedding">Wedding</option>
                         <option value="Reception">Reception</option>
                         <option value="Engagement">Engagement</option>
+                        <option value="Birthday">Birthday</option>
+                        <option value="Corporate Event">Corporate Event</option>
+                        <option value="Family Gathering">Family Gathering</option>
+                        <option value="Other">Other</option>
                     </select>
                     {errors.eventName && <p className="text-red-500 text-sm">{errors.eventName}</p>}
                 </div>
@@ -199,6 +202,7 @@ const SecureUpload = () => {
                     />
                     {errors.images && <p className="text-red-500 text-sm">{errors.images}</p>}
                 </div>
+                {errors.media && <p className="text-red-500 text-sm">{errors.media}</p>}
                 <div>
                     <button type="submit" className="w-full shadow-lg text-white bg-pink-500 hover:bg-pink-700 rounded-md px-4 py-2 text-lg font-bold" style={{ fontFamily: "'Dancing Script', cursive" }}>
                         Upload

@@ -26,7 +26,7 @@ const AccessDenied = () => {
                 Access Denied
             </h1>
             <p className="text-lg mb-8" style={{ fontFamily: "'Dancing Script', cursive", color: '#6c757d' }}>
-                Please enter the key to gain access.
+                Please enter the password to gain access.
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <input

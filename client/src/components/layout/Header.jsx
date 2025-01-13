@@ -18,7 +18,7 @@ export default function Header() {
     const [menuOpen, setMenuOpen] = useState(false)
 
     return (
-        <nav className="bg-white shadow-md">
+        <nav className="bg-white shadow-md" aria-label="Main Navigation">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
                     <div className="flex flex-1 items-center justify-between sm:items-stretch sm:justify-between">
@@ -27,6 +27,9 @@ export default function Header() {
                             <button
                                 onClick={() => setMenuOpen(!menuOpen)}
                                 className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                                aria-controls="mobile-menu"
+                                aria-expanded={menuOpen}
+                                aria-label="Toggle navigation menu"
                             >
                                 {menuOpen ? (
                                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
@@ -50,6 +53,7 @@ export default function Header() {
                                             'text-gray-500 hover:text-gray-900',
                                             'rounded-md px-3 py-2 text-sm font-medium'
                                         )}
+                                        aria-label={item.name}
                                     >
                                         {item.name}
                                     </Link>
@@ -57,7 +61,7 @@ export default function Header() {
                             </div>
                         </div>
                         <div className="flex items-center space-x-4">
-                            <Link to='/contact-us' className='text-white bg-pink-500 hover:bg-pink-700 rounded-md px-3 py-2 text-sm font-bold'>
+                            <Link to='/contact-us' className='text-white bg-pink-500 hover:bg-pink-700 rounded-md px-3 py-2 text-sm font-bold' aria-label="Request a Quote">
                                 Request a Quote
                             </Link>
                         </div>
@@ -67,7 +71,7 @@ export default function Header() {
 
             {
                 menuOpen && (
-                    <div className="sm:hidden">
+                    <div className="sm:hidden" id="mobile-menu">
                         <div className="space-y-1 px-2 pb-3 pt-2">
                             {navigation.map((item) => (
                                 <Link
@@ -77,6 +81,7 @@ export default function Header() {
                                         'text-gray-700 block rounded-md px-3 py-2 text-base font-bold'
                                     )}
                                     onClick={() => setMenuOpen(false)}
+                                    aria-label={item.name}
                                 >
                                     {item.name}
                                 </Link>

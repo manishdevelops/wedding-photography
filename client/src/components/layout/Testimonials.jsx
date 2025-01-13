@@ -14,7 +14,6 @@ const Testimonials = () => {
     const [loadReview, setLoadReview] = useState(false);
 
     const [recaptcha, setRecaptcha] = useState('');
-    console.log(recaptcha)
     const captchaRef = useRef();
 
     const getReviews = async () => {
