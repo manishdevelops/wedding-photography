@@ -108,28 +108,36 @@ const Gallery = () => {
                     </div>
                 </div>
                 <div className="flex flex-col sm:flex-row justify-center mb-8 space-y-4 sm:space-y-0 sm:space-x-4">
-                    <select
-                        className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                        disabled={loading}
-                    >
-                        <option value="All Events">All Events</option>
-                        {uniqueEventNames.map((eventName, index) => (
-                            <option key={`${eventName}-${index}`} value={eventName}>{eventName}</option>
-                        ))}
-                    </select>
-                    <select
-                        className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                        value={selectedPhotographer}
-                        onChange={(e) => setSelectedPhotographer(e.target.value)}
-                        disabled={loading}
-                    >
-                        <option value="All Photographers">All Photographers</option>
-                        {uniquePhotographers.map((photographer, index) => (
-                            <option key={`${photographer}-${index}`} value={photographer}>{photographer}</option>
-                        ))}
-                    </select>
+                    <div>
+                        <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
+                        <select
+                            id="category"
+                            className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            disabled={loading}
+                        >
+                            <option value="All Events">All Events</option>
+                            {uniqueEventNames.map((eventName, index) => (
+                                <option key={`${eventName}-${index}`} value={eventName}>{eventName}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="photographer" className="block text-sm font-medium text-gray-700">Photographer</label>
+                        <select
+                            id="photographer"
+                            className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            value={selectedPhotographer}
+                            onChange={(e) => setSelectedPhotographer(e.target.value)}
+                            disabled={loading}
+                        >
+                            <option value="All Photographers">All Photographers</option>
+                            {uniquePhotographers.map((photographer, index) => (
+                                <option key={`${photographer}-${index}`} value={photographer}>{photographer}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
                 <div className="flex justify-center mb-8">
                     <button
@@ -172,6 +180,7 @@ const Gallery = () => {
                                             src={video}
                                             controls
                                             className="w-full h-64 object-cover rounded-md shadow-lg transition-transform transform group-hover:scale-105"
+                                            alt={media.eventName}
                                         />
                                         <div className="text-center mt-2">
                                             <p className="text-sm" style={{ fontFamily: "'Dancing Script', cursive" }}>{media.eventName}</p>

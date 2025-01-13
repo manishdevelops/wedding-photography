@@ -39,7 +39,7 @@ export default function Header() {
                             </button>
                         </div>
                         <div className="flex flex-shrink-0 items-center">
-                            <Link to='/'>
+                            <Link to='/' aria-label="Home">
                                 <img className="w-32 h-12" src="https://www.pngarts.com/files/3/Wedding-PNG-High-Quality-Image.png" alt="logo" />
                             </Link>
                         </div>
