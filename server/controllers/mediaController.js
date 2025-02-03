@@ -26,7 +26,7 @@ exports.upload = catchAsync(async (req, res, next) => {
 
 exports.getMedia = catchAsync(async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const limit = 2;
+    const limit = 5;
     const skip = (page - 1) * limit;
 
     // Fetch media sorted by newest to oldest

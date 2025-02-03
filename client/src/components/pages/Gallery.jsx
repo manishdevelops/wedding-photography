@@ -22,10 +22,18 @@ const Gallery = () => {
     const observer = useRef();
 
     const getMedia = useCallback(async () => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 seconds timeout
+
         try {
             setLoading(true);
             setError(false);
-            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/media/get-media?page=${page}`);
+            const res = await fetch(
+                `${process.env.REACT_APP_API_URL}/api/media/get-media?page=${page}`,
+                { signal: controller.signal }
+            );
+
+            clearTimeout(timeoutId);
 
             if (!res.ok) {
                 const errorData = await res.json();
@@ -35,15 +43,18 @@ const Gallery = () => {
             }
 
             const resData = await res.json();
-
-            setLoading(false);
-            setError(false);
-            setMediaData(prevMediaData => [...prevMediaData, ...resData.data]);
+            setMediaData((prevMediaData) => [...prevMediaData, ...resData.data]);
             setHasMore(resData.data.length > 0);
         } catch (error) {
-            setLoading(false);
+            if (error.name === "AbortError") {
+                toast.error("Request timed out. Please try again.");
+            } else {
+                toast.error(error.message);
+            }
             setError(true);
-            return toast.error(error.message);
+        } finally {
+            clearTimeout(timeoutId);
+            setLoading(false);
         }
     }, [page]);
 
