@@ -22,20 +22,20 @@ const sendEmail = async (options) => {
     await transporter.sendMail(mailOptions);
 };
 
-const verifyCaptcha = async (recaptcha) => {
-    const response = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET_KEY}&response=${recaptcha}`, {
-        method: 'POST'
-    });
-    const data = await response.json();
-    if (!data.success) {
-        throw new AppError('Captcha verification failed. Please try again.', 400);
-    }
-};
+// const verifyCaptcha = async (recaptcha) => {
+//     const response = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.CAPTCHA_SECRET_KEY}&response=${recaptcha}`, {
+//         method: 'POST'
+//     });
+//     const data = await response.json();
+//     if (!data.success) {
+//         throw new AppError('Captcha verification failed. Please try again.', 400);
+//     }
+// };
 
 exports.createContact = catchAsync(async (req, res, next) => {
-    const { name, email, phone, weddingDate, message, recaptcha } = req.body;
+    const { name, email, phone, weddingDate, message } = req.body;
 
-    await verifyCaptcha(recaptcha);
+    // await verifyCaptcha(recaptcha);
 
     const contact = await Contact.create({
         name, email, phone, weddingDate, message
