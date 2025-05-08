@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
-import ReCAPTCHA from 'react-google-recaptcha';
+// import ReCAPTCHA from 'react-google-recaptcha';
 
 
 const Testimonials = () => {
@@ -13,8 +13,8 @@ const Testimonials = () => {
     const [loading, setLoading] = useState(false);
     const [loadReview, setLoadReview] = useState(false);
 
-    const [recaptcha, setRecaptcha] = useState('');
-    const captchaRef = useRef();
+    // const [recaptcha, setRecaptcha] = useState('');
+    // const captchaRef = useRef();
 
     const getReviews = async () => {
         try {
@@ -52,15 +52,15 @@ const Testimonials = () => {
         }
     }, [reviews]); // Runs whenever `reviews` changes
 
-    const handleCaptchaChange = (value) => {
-        setRecaptcha(value);
-    };
+    // const handleCaptchaChange = (value) => {
+    //     setRecaptcha(value);
+    // };
 
     const validateForm = () => {
         const newErrors = {}
         if (!name) newErrors.name = 'Please enter your name.'
         if (!review) newErrors.review = 'Please write a review.'
-        if (!recaptcha) newErrors.captcha = 'Please verify that you are not a robot.';
+        // if (!recaptcha) newErrors.captcha = 'Please verify that you are not a robot.';
         return newErrors
     }
 
@@ -80,7 +80,7 @@ const Testimonials = () => {
 
         try {
             setLoading(true);
-            captchaRef.current.reset();
+            // captchaRef.current.reset();
 
             const res = await fetch(`${process.env.REACT_APP_API_URL}/api/reviews/create-review`, {
                 method: 'POST',
@@ -88,20 +88,21 @@ const Testimonials = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    ...newReview, recaptcha
+                    ...newReview,
+                    // recaptcha
                 })
             });
 
             if (res.ok === false) {
                 const errorData = await res.json();
                 setLoading(false);
-                setRecaptcha('');
+                // setRecaptcha('');
                 return toast.error(errorData.message);
             }
 
             setLoading(false);
             toast.success('Review submitted successfully😇!');
-            setRecaptcha('');
+            // setRecaptcha('');
             getReviews();
 
 
@@ -174,14 +175,14 @@ const Testimonials = () => {
                     ></textarea>
                     {errors.review && <p className="text-red-500 text-sm">{errors.review}</p>}
                 </div>
-                <div>
+                {/* <div>
                     <ReCAPTCHA
                         sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                         ref={captchaRef}
                         onChange={handleCaptchaChange}
                     />
                     {errors.captcha && <p className="text-red-500 text-sm">{errors.captcha}</p>}
-                </div>
+                </div> */}
                 <div>
                     <button type="submit" className="w-full shadow-lg text-white bg-pink-500 hover:bg-pink-700 rounded-md px-4 py-2 text-lg font-bold" style={{ fontFamily: "'Dancing Script', cursive" }}>
                         {loading ? 'Loading...' : 'Submit'}
