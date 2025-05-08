@@ -8,6 +8,11 @@ const AccessDenied = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(keyInput === process.env.REACT_APP_ADMIN_SECRET_KEY)
+        console.log(keyInput)
+        console.log(process.env.REACT_APP_ADMIN_SECRET_KEY)
+
+        console.log()
         if (keyInput === process.env.REACT_APP_ADMIN_SECRET_KEY) {
             toast.success('Access Granted');
             setAccessGranted(true);
